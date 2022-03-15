@@ -10,43 +10,26 @@ import Foundation
 public typealias HttpHeaders = [String:String]
 public typealias Parameters = [String:Any]
 
-public enum HTTPTask {
-    case request
-    
-    case requestParameters(bodyParameters:Parameters?,
-                           urlParameters:Parameters?)
-    
-    case requestParametersAndHeader(bodyParameters:Parameters?,
-                                    urlParameters:Parameters?,
-                                    additionalHeader:HttpHeaders?)
-}
+public typealias HTTPTask = (bodyParameters: Parameters?, urlParameters: Parameters?)
 
 public enum HTTPMethod:String {
-    case get    = "GET"
-}
-
-extension EndPointType {
-    var baseUrl:URL {
-        fatalError(String.Error.baseURLFail)
-    }
-    
-    var hasDomain:Bool {
-        return false
-    }
-    
-    var headers:HttpHeaders? {
-        return ["Authorization": "Bearer ",
-            "Ocp-Apim-Subscription-Key": ""]
-    }
-    
+    case get = "GET"
 }
 
 protocol EndPointType {
     var baseUrl: URL { get }
     var path: String { get }
     var task: HTTPTask { get }
-    var hasDomain: Bool { get }
     var headers: HttpHeaders? { get }
     var httpMethod: HTTPMethod { get }
 }
 
+extension EndPointType {
+    var baseUrl: URL {
+        fatalError(String.Error.baseURLFail)
+    }
+    
+    var headers:HttpHeaders? {
+        return ["Authorization": "Client-ID 1ceddedc03a5d71"]
+    }
+}

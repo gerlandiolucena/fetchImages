@@ -12,7 +12,7 @@ class AlbumCollectionListWireframe: NSObject,  AlbumCollectionListWireframeProto
     
     // MARK: - Constants
     
-    private let storyBoardName = "AlbumCollectionList"
+    private let storyBoardName = "Main"
     
     // MARK: - Viper Module Properties
     
@@ -20,14 +20,13 @@ class AlbumCollectionListWireframe: NSObject,  AlbumCollectionListWireframeProto
     
     // MARK: - Constructors
     
-    init() {
+    override init() {
         super.init()
         
         let view = self.viewControllerFromStoryboard()
         let interactor = AlbumCollectionListInteractor()
         let presenter = AlbumCollectionListPresenter(view: view, interactor: interactor, wire: self)
         
-        interactor.output = presenter
         view.presenter = presenter
         
         self.view = view

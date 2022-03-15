@@ -13,11 +13,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        let contentView = HomeView()
+        
+        let wireframe = AlbumCollectionListWireframe()
+        let contentView = wireframe.view
+        //Projeto feito em swiftUI
+        //let contentView = HomeView()
 
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView)
+            window.rootViewController = contentView//UIHostingController(rootView: contentView)
+            //Projeto feito em swiftUI
+            //window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
         }

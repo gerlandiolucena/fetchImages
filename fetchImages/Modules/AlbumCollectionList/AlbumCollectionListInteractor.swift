@@ -9,7 +9,24 @@
 
 import UIKit
 
-class AlbumCollectionListInteractor: AlbumCollectionListInteractorInputProtocol {
+enum NetworkError: Error {
+    case noResult
+}
 
-    weak var output: AlbumCollectionListInteractorOutputProtocol?
+class AlbumCollectionListInteractor: BaseRequest<ImageSearchAPI, ImageSearchResult>, AlbumCollectionListInteractorInputProtocol {
+
+    func request(term: String, completionHandler: @escaping (Result<ImageSearchResult, NetworkError>) -> Void) {
+        setupRequest(endpoint: .search(term: term))
+        self.cancellable = publisher?
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { errorReceive in
+                print(errorReceive)
+            }, receiveValue: { imageResult in
+                if let result = imageResult {
+                    completionHandler(.success(result))
+                } else {
+                    completionHandler(.failure(NetworkError.noResult))
+                }
+            })
+    }
 }

@@ -1,5 +1,5 @@
 //
-//  AsyncWebImageView.swift
+//  AsyncImageView.swift
 //  LearningSwiftUI
 //
 //  Created by Gerlandio Lucena on 10/10/21.
@@ -9,14 +9,13 @@ import Foundation
 import SwiftUI
 import Combine
 
-struct AsyncWebImageView: View {
+struct AsyncImageView: View {
     private let url: URL
-    private let placeHolder: Image
+    var maximumSize: CGFloat = 120
     @ObservedObject var binder = ImageLoader()
     
-    init(url: URL, placeHolder: Image) {
+    init(url: URL) {
         self.url = url
-        self.placeHolder = placeHolder
     }
     
     var body: some View {
@@ -24,25 +23,31 @@ struct AsyncWebImageView: View {
             if binder.image != nil {
                 Image(uiImage: binder.image!)
                     .resizable()
-                    .frame(width: 80, height: 80, alignment: .center)
-                    .cornerRadius(40)
-                    .clipped()
+                    .aspectRatio(contentMode: .fit)
+            } else if binder.isLoading {
+                loadingIndicator
             } else {
-                placeHolder
-                    .resizable()
-                    .frame(width: 80, height: 80, alignment: .center)
-                    .cornerRadius(40)
-                    .clipped()
+                Image(systemName: "photo.fill")
+                    .onTapGesture {
+                        self.binder.load(url: url)
+                    }
             }
         }
+        .frame(width: maximumSize, height: maximumSize, alignment: .center)
+        .background(.black)
         .foregroundColor(.gray)
         .onAppear { self.binder.load(url: url) }
         .onDisappear { self.binder.cancel() }
+    }
+    
+    private var loadingIndicator: some View {
+        SpinnerLoading(style: .medium)
+            .frame(idealWidth: .infinity, maxWidth: .infinity, alignment: .center)
     }
 }
 
 struct AsyncWebImageView_Previews: PreviewProvider {
     static var previews: some View {
-        AsyncWebImageView(url: URL(string: "https://rickandmortyapi.com/api/character/avatar/1.jpeg")!, placeHolder: Image(systemName: "person.fill"))
+        AsyncImageView(url: URL(string: "https://i.imgur.com/A8Froz6.png")!)
     }
 }

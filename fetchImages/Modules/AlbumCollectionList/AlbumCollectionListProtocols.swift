@@ -10,24 +10,25 @@
 import Foundation
 
 //MARK: Wireframe -
-protocol AlbumCollectionListWireframeProtocol: class {
+protocol AlbumCollectionListWireframeProtocol: AnyObject {
 }
 
 // MARK: - Interactor
 
 protocol AlbumCollectionListInteractorInputProtocol {
+    func request(term: String, completionHandler: @escaping (Result<ImageSearchResult, NetworkError>) -> Void)  
 }
 
 // MARK: - Presenter
 
-protocol AlbumCollectionListPresenterInputProtocol: class {
-    
-}
-
-protocol AlbumCollectionListInteractorOutputProtocol: class {
+protocol AlbumCollectionListPresenterInputProtocol: AnyObject {
+    var imageResult: ImageSearchResult? { get }
+    func fetchAlbum(with term: String)
 }
 
 // MARK: - View
 
-protocol AlbumCollectionListPresenterOutputProtocol: class {
+protocol AlbumCollectionListPresenterOutputProtocol: AnyObject {
+    func reloadData()
+    func showError()
 }
